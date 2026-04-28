@@ -38,6 +38,7 @@ services:
       - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
     volumes:
       - ./data/n8n:/home/node/.n8n
+      - ./documents:/documents
     depends_on:
       postgres:
         condition: service_healthy
