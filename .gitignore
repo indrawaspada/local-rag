@@ -1,0 +1,5 @@
+# Ignore data directory containing database and model binaries
+data/
+
+# Ignore environment file containing secrets
+.env
