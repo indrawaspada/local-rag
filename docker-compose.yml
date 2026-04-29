@@ -1,53 +1,6 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: local-rag-postgres
-    restart: always
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-    volumes:
-      - ./data/postgres:/var/lib/postgresql/data
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -h localhost -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
-      interval: 5s
-      timeout: 5s
-      retries: 10
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 256M
-
-  n8n:
-    image: docker.n8n.io/n8nio/n8n
-    container_name: local-rag-n8n
-    restart: always
-    ports:
-      - "${N8N_PORT}:5678"
-    environment:
-      - DB_TYPE=postgresdb
-      - DB_POSTGRESDB_HOST=postgres
-      - DB_POSTGRESDB_PORT=5432
-      - DB_POSTGRESDB_DATABASE=${POSTGRES_DB}
-      - DB_POSTGRESDB_USER=${POSTGRES_USER}
-      - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
-      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
-    volumes:
-      - ./data/n8n:/home/node/.n8n
-      - ./documents:/documents
-    depends_on:
-      postgres:
-        condition: service_healthy
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 512M
-
   qdrant:
     image: qdrant/qdrant
     container_name: local-rag-qdrant
@@ -62,20 +15,3 @@ services:
           cpus: '0.5'
           memory: 512M
 
-  ollama:
-    image: ollama/ollama
-    container_name: local-rag-ollama
-    restart: always
-    ports:
-      - "${OLLAMA_PORT}:11434"
-    volumes:
-      - ./data/ollama:/root/.ollama
-    # Note: Jika Docker Anda telah disetup untuk mendukung NVIDIA GPU, 
-    # Anda bisa mempercepat model Ollama dengan melepas tanda (comment #) di blok berikut:
-    # deploy:
-    #   resources:
-    #     reservations:
-    #       devices:
-    #         - driver: nvidia
-    #           count: 1
-    #           capabilities: [gpu]

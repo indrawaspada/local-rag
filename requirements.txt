@@ -1,0 +1,9 @@
+streamlit
+langchain
+langchain-community
+langchain-qdrant
+langchain-ollama
+langchain-huggingface
+sentence-transformers
+qdrant-client
+pypdf
