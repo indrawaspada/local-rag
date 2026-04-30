@@ -7,3 +7,9 @@ langchain-huggingface
 sentence-transformers
 qdrant-client
 pypdf
+torchvision
+ragas
+datasets
+pandas
+langchain-google-genai
+python-dotenv
